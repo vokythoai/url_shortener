@@ -10,8 +10,8 @@
     - Run `rake db:migrate` - run project migration
     - Run `rails s` - starting server
 
-  Project can be built with Docker
-  Live demo: https://aged-rain-9962.fly.dev/
+  - Project can be built with Docker
+  - Live demo: https://aged-rain-9962.fly.dev/
 
   + Testing
     - Run `rspec`
