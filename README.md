@@ -21,7 +21,7 @@
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
   -d '{
-	"original_url": "google.com.vn"
+	"original_url": "https://codesubmit.io/library/react"
 }'`
     - Decode url:
       `curl -X POST \
@@ -29,7 +29,7 @@
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
   -d '{
-	"url": "https://aged-rain-9962.fly.dev/4YaBEw"
+	"url": "https://aged-rain-9962.fly.dev/35ZE7g"
 }'`
 
 ## 2. Solution
