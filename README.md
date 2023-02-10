@@ -10,11 +10,14 @@
     - Run `rake db:migrate` - run project migration
     - Run `rails s` - starting server
 
+  Project can be built with Docker
+  Live demo: https://aged-rain-9962.fly.dev/
+
   + Testing
     - Run `rspec`
     - Create new short url:
       `curl -X POST \
-  http://localhost:3000/encode \
+  https://aged-rain-9962.fly.dev/encode \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
   -d '{
@@ -22,11 +25,11 @@
 }'`
     - Decode url:
       `curl -X POST \
-  http://localhost:3000/decode \
+  https://aged-rain-9962.fly.dev/decode \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
   -d '{
-	"url": "https://thoai.xyz/45Cg5H"
+	"url": "https://aged-rain-9962.fly.dev/4YaBEw"
 }'`
 
 ## 2. Solution
@@ -42,8 +45,6 @@
     + In our system relational queries occur rarely => NoSQL is a good choice and easier for scaling system.
     + LRU (Least Recently Used) is the good caching strategy for system. Caching about 20% of the most used URLs for better performance.
     + Indexing column when using RDBMS for faster query.
-    + Using multiple read replicas for our database.
-    + Using a load balancer with Least Connection method, client requests are distributed to the application server with the least number of active connections at the time the client request is received.
 
   - Security:
     - System can be attacked by DDoS or spamming requests.
@@ -57,16 +58,18 @@
     + We also use a counter_number (each request will have an unique number) for encoding original_url to make sure there is no conflict between each request.
       + MD5(original_url + counter) -> base62Encode -> hash
       + Using couter service can quickly become a single point for failure so we should have distributed system manager such as Zookeeper which can provide distributed synchronization. Zookeeper can maintain multiple ranges for our counter servers.
-   ```
-      Range 1: 1→1,000,000
-      Range 2: 1,000,001→2,000,000
-      Range 3: 2,000,001→3,000,000
-      .
-      .
-  ```
+    ```
+        Range 1: 1→1,000,000
+        Range 2: 1,000,001→2,000,000
+        Range 3: 2,000,001→3,000,000
+        .
+        .
+    ```
+
     + We also can create a standalone Key Generation Service (KGS) that generates a unique key ahead of time and stores it in a separate database for later use. Make things simpler.
 
 ## 4. Scaling
+
   - Assumption we will have 100:1 ratio between read and write and server is read-heavy ( more redirection requests compared to new URL shortenings.)
   - Traffic:
     + 500M new URL shortenings per month, 100 * 500M => 50B redirections per month.
@@ -94,12 +97,15 @@
     + Range Based Partitioning
     + Composite Partitioning
 
-  - Consistent Hashing for caching instance ( build a distributed caching system ) for a better performance.
+  - Consistent Hashing for caching instances ( build a distributed caching system ) for a better performance.
 
   - Database Clean Up
     + Removed expired link by 2 ways:
     + Active clean up: using cron job to remove expired urls
     + Passive clean up: when users tries to access an expired link, we will remove it from DB.
+
+  + Using multiple read replicas for our database.
+  + Using a load balancer with Least Connection method, client requests are distributed to the application server with the least number of active connections at the time the client request is received.
 
   - Metric and analytic:
     + We can store and update metadata like user's country, platform ... alongside URL to have an overview of user needs. It could be useful in case we need to choose server location, CDN ...

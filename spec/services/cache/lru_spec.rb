@@ -4,9 +4,15 @@ require 'rails_helper'
 
 describe Cache::Lru, aggregate_failures: true do
   describe '#set' do
+    before do
+      Rails.cache.clear
+    end
+
     it 'saves key value to cache' do
       cache_class = described_class.new
-      expect { cache_class.set('Thoai', 'Vo') }.to change { cache_class.container.length }.from(0).to(1)
+      cache_class.set('Thoai', 'Vo')
+
+      expect(cache_class.container.size).to eq(1)
     end
 
     context 'when caching is reach limit' do

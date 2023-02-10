@@ -21,9 +21,23 @@ RSpec.describe UrlsController, type: :request do
 
   describe 'POST decode' do
     it 'returns a successful response' do
-      post '/decode', params: { url: 'https://vnexpress.net/' }
+      original_url = 'https://translate.google.com/?hl=vi'
+      counter_number = 1
+
+      url = UrlString::Shortener.new(original_url, counter_number).call
+      url_hash = "#{ENV['domain']}/#{url.url_hash}"
+
+      post '/decode', params: { url: url_hash }
 
       expect(response).to be_successful
+    end
+
+    context 'When link is not found' do
+      it 'returns 404 error' do
+        post '/decode', params: { url: 'https://vnexpress.net/' }
+
+        expect(response.status).to eq 404
+      end
     end
 
     context 'When params are invalid' do
@@ -31,7 +45,7 @@ RSpec.describe UrlsController, type: :request do
         post '/decode', params: { url1: '' }
 
         body = JSON.parse(response.body)
-        expect(response.status).to eq 200
+        expect(response.status).to eq 404
         expect(body).to eq({ 'original_link' => nil })
       end
     end

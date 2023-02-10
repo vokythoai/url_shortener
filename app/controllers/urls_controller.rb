@@ -16,6 +16,7 @@ class UrlsController < ApplicationController
   def decode
     encoded_url = params['url']
     original_url = UrlString::Decoder.new(encoded_url).call
+    return render json: { original_link: original_url }, status: :not_found unless original_url
 
     render json: { original_link: original_url }, status: :ok
   end
