@@ -82,3 +82,5 @@ gem 'pry-rails', '~> 0.3.9'
 gem 'base62', '~> 1.0'
 # Load env variables
   gem 'dotenv-rails', '~> 2.7', '>= 2.7.6'
+
+gem "dockerfile-rails", ">= 1.0", :group => :development
