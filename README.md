@@ -14,24 +14,29 @@
   - Live demo: https://aged-rain-9962.fly.dev/
 
   + Testing
-    - Run `rspec`
+    - Run `rspec` to run all unit tests.
     - Create new short url:
-      `curl -X POST \
-  https://aged-rain-9962.fly.dev/encode \
-  -H 'cache-control: no-cache' \
-  -H 'content-type: application/json' \
-  -d '{
-	"original_url": "https://codesubmit.io/library/react"
-}'`
+      ```
+      curl -X POST \
+      https://aged-rain-9962.fly.dev/encode \
+      -H 'cache-control: no-cache' \
+      -H 'content-type: application/json' \
+      -H 'postman-token: e1ee3e60-ef53-44cc-3994-d5e5dff3ada9' \
+      -d '{
+      "original_url": "https://codesubmit.io/library/react2222"
+      }'
+      ```
     - Decode url:
-      `curl -X POST \
-  https://aged-rain-9962.fly.dev/decode \
-  -H 'cache-control: no-cache' \
-  -H 'content-type: application/json' \
-  -d '{
-	"url": "https://aged-rain-9962.fly.dev/35ZE7g"
-}'`
-
+      ```
+        curl -X POST \
+        https://aged-rain-9962.fly.dev/decode \
+        -H 'cache-control: no-cache' \
+        -H 'content-type: application/json' \
+        -H 'postman-token: 94ec4d4f-23de-0462-f683-b661f4d5ef0e' \
+        -d '{
+        "url": "https://aged-rain-9962.fly.dev/4LEzL8"
+        }'
+      ```
 ## 2. Solution
   - Each url need to be shorten will be stored in database with a unique hash_id, link with hash_id will be returned to user for using.
   - Algorithm:
